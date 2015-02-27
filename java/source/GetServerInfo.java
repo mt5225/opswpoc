@@ -1,10 +1,8 @@
 package source;
-// Copyright 2005-2007 Opsware, Inc.  All rights reserved.
 
 import com.opsware.client.*;
 import com.opsware.server.*;
 import com.opsware.search.*;
-import java.io.*;
 
 public class GetServerInfo {
 
@@ -19,7 +17,12 @@ public class GetServerInfo {
 
 	// A handle to the ServerService.
 	private static ServerService serverSvc;
+	
+	// User password
+	private static String USERNAME ="admin";
+	private static String PASSWD = "opsware_admin";
 
+	
 	public static void main(String[] args) {
 		if (!parseArgs(args)) {
 			System.exit(1);
@@ -38,7 +41,7 @@ public class GetServerInfo {
 
 	protected static boolean parseArgs(String[] args) {
 		// Parse the command-line arguments.
-		for (int i = 0; i < args.length; i++) {
+/*		for (int i = 0; i < args.length; i++) {
 			if ("--host".equals(args[i])) {
 				host = args[++i];
 
@@ -48,7 +51,8 @@ public class GetServerInfo {
 			} else {
 				target = args[i];
 			}
-		}
+		}*/
+		target = args[0];
 
 		if (target == null) {
 			System.out
@@ -70,13 +74,11 @@ public class GetServerInfo {
 	}
 
 	protected static void login() throws Exception {
-		// Prompt for the user name and password.
-		String[] userPasswd = getUserPassword();
-
+		
 		// Use the OpswareClient to create an https connection to Opsware SAS
 		// and authenticate the user.
-		OpswareClient.connect("https", host, (short) port, userPasswd[0],
-				userPasswd[1], true);
+		OpswareClient.connect("https", host, (short) port, USERNAME,
+				PASSWD, true);
 
 		// Get the handle to the required service.
 		serverSvc = (ServerService) OpswareClient
@@ -107,19 +109,5 @@ public class GetServerInfo {
 			System.out.println("  " + serverVOs[i].getOsVersion());
 			System.out.println();
 		}
-	}
-
-	protected static String[] getUserPassword() throws IOException {
-		// Prompt for the user name and password.
-		String[] userPasswd = new String[2];
-		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				System.in));
-		System.out.print("Enter Opsware user name: ");
-		userPasswd[0] = reader.readLine();
-
-		System.out.print("Enter Opsware user password: ");
-		userPasswd[1] = reader.readLine();
-
-		return userPasswd;
 	}
 }
