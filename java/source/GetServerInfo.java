@@ -1,4 +1,4 @@
-package source;
+package demo;
 
 import com.opsware.client.*;
 import com.opsware.server.*;
